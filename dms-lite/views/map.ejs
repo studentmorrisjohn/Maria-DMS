@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Project Maria</title>
+
+        <!-- Leaflet CSS-->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+        crossorigin=""/>
+
+        <!--Leaflet JavaScript-->
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+        crossorigin=""></script>
+
+        <!-- CSS -->
+        <style>
+            #map { height: 800px; width: 80% }
+        </style>
+
+    </head>
+
+
+    <body>
+        <h1>Project Maria</h1>
+        <div id="map"></div>
+
+        
+        <script>
+            
+            // All OpenStreetMap Testing
+
+            //Map Variable
+            
+            var locations = [[14.150273, 121.212752], [14.141438, 121.204444]];
+            
+
+            
+            var map = L.map('map');
+            console.log(typeof locations["something"]);
+
+            map.setView([14.140285, 121.212066], 14);
+
+            //Marker Variable
+
+            
+
+            locations.map((location) => {
+                L.marker(location).addTo(map);
+            });
+            var marker = L.marker([14.150273, 121.212752]).addTo(map);
+
+            //Circle Variable
+            var circle = L.circle([14.150273, 121.212752], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 500
+            }).addTo(map);
+
+            //Tile Layer
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            //Map Attribution
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            //Popups 
+            marker.bindPopup("<b>WASSUP BABY</b><br>I am HERE - Allmight.").openPopup();
+            circle.bindPopup("Within Rescuees Vicinity");
+            var popup = L.popup();
+            function onMapClick(e) {
+            popup
+            .setLatLng(e.latlng)
+            .setContent("The coordinates are as follow " + e.latlng.toString())
+            .openOn(map);
+            }
+            map.on('click', onMapClick);
+
+
+        </script>
+
+    </body>
+
+
+</html>

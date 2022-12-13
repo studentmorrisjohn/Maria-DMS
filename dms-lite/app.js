@@ -10,7 +10,7 @@ var dataRouter = require('./routes/data');
 var ducksRouter = require('./routes/ducks');
 var settingsRouter = require('./routes/settings');
 var dbRouter = require('./routes/db')
-
+var mapRouter = require('./routes/map')
 
 var app = express();
 
@@ -31,6 +31,7 @@ app.use('/users', usersRouter);
 app.use('/data', dataRouter);
 app.use('/settings', settingsRouter);
 app.use('/ducks', ducksRouter);
+app.use('/map', mapRouter);
 
 // Serve libraries that were installed via npm - thanks to https://stackoverflow.com/a/70744989
 app.use('/stylesheets/leaflet/', express.static(path.join(__dirname, "node_modules/leaflet/dist/")));
