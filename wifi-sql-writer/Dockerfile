@@ -8,7 +8,7 @@ RUN apt-get install python3 -y && apt install python3-pip -y
 COPY wifi_sqlwriter.py /
 
 # Installs paho-MQTT and mariadb libraries for python
-RUN pip3 install paho-mqtt mariadb
+RUN pip3 install paho-mqtt mariadb python-socketio[client]
 
 # Tells Docker to run the python code and where it is located
 ENTRYPOINT [ "python3", "wifi_sqlwriter.py" ]

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="UTF8">
+<head>
+	<%- include ('partials/head') %>
+	<script src="/stylesheets/tablefilter/tablefilter.js"></script>
+	<link rel="stylesheet" href="/stylesheets/leaflet/leaflet.css" crossorigin=""/>
+	<script src="/stylesheets/leaflet/leaflet.js" crossorigin=""></script>
+	<script src="/settings.js"></script>
+	<script src="/jquery/jquery.js"></script>
+	<script src="gps.js"></script>
+	<script src="ble.js"></script>
+	<script src="new-js/Utils.js"></script>
+	<script src="/scripts/chart.js"></script>
+	<script src="new-js/visuals.js" type="module"></script>
+	<link rel="stylesheet" href="/stylesheets/new-style/styles.css"/>
+
+
+	<title>DMS LITE</title>
+	<%
+		function isDetailedView() {
+			if (cookies.detailedView == "true") {
+				return "inline";
+			}
+			return "none";
+		}
+	%>
+
+</head>
+<body>
+
+	<div id="data">
+	<div class="container-xxl">
+	<div class="row">
+	<div class="col-sm-12 main-section">
+	<h4 id="main-text">Recent Data</h4>
+	<table class="table main-table">
+		<thead>
+			<th>DUCKID</th>
+			<th>TIMESTAMP</th>
+			<th>TOPIC</th>
+			<th>MESSAGE ID</th>
+			<th>PATH</th>
+			<th>PAYLOAD</th>
+			<% if(cookies.detailedView == "true"){ %>
+				<th>HOPS</th> 
+				<th>TYPE</th>
+			<% } %>
+		</thead>
+		<tbody class="padding-table">
+			<%
+			function displaySensorData(duckMsg) {
+				if (duckMsg.topic == "bleSensor") {
+					let bleData = duckMsg.payload.split(';');
+					bleData.pop();
+				%>
+					<ul style="margin: 0em;">
+						<li><%=bleData[0]%></li>
+					</ul>
+
+					<span class="long-text" style="display: <%=isDetailedView()%>" >
+						<ul style="margin: 0em;">
+					<%
+						bleData.slice(1).forEach((item) => {
+							%><li><%=item%></li><%
+						});
+					%>
+					</ul>
+					</span>
+
+				<%
+					if (cookies.detailedView == "true") {
+							if (bleData.length > 1) {
+								%>
+								<span class="show-more-button" data-more="1" style="color:#0d6efd;cursor:pointer;text-decoration: underline;">Show less</span>
+								<%
+							}
+						} else {
+							if (bleData.length > 1) { %>
+								<span class="show-more-button" data-more="0" style="color:#0d6efd;cursor:pointer;text-decoration: underline;">Show more</span>
+									<%
+							}
+						}
+
+				}
+				// GPS Data and normal payload
+				else {
+					%><%=duckMsg.payload%><%
+
+					// Check if payload contains GPS data
+					let gpsData = duckMsg.payload;
+					if (duckMsg.topic == "portal" || duckMsg.topic == "gps") {
+						if (duckMsg.topic == "portal") {
+							gpsData = duckMsg.payload.split('*').pop();
+						}
+
+						const gpsDataFields = gpsData.split(',');
+						if (gpsDataFields.length < 4) {
+							return;
+						}
+						const lat = gpsDataFields[2].trim();
+						const lon = gpsDataFields[3].trim();
+						if (parseFloat(lat) == NaN || parseFloat(lon) == NaN) {
+							return;
+						}
+						%>
+						<%= duckMsg.payload %>
+							<br/>
+							<div class="gps-link">
+								<a class="gmaps-button" href="#" gpsData="<%=lat%>, <%=lon%>">View (Google Maps)</a> /
+								<a class="osm-button" href="#" lat="<%=lat%>" lon="<%=lon%>">View (OpenStreetMap)</a>
+								<div id="gmaps-embed"></div>
+								<div id="osm-embed"></div>
+							</div>
+						<%
+					}
+				}
+			}
+
+			something.forEach(function(duck) { %>
+				<tr>
+					<td><%= duck.duck_id %></td>
+					<td><%= duck.timestamp %></td>
+					<td><%= duck.topic %></td>
+					<td><%= duck.message_id %></td>
+					<td><%= duck.path %></td>
+					<td>
+						<% displaySensorData(duck); %>
+					</td>
+					<% if (cookies.detailedView == "true") { %>
+						<td><%= duck.hops %></td>
+						<td><%= duck.duck_type%></td>
+					<% } %>
+					</tr>
+			<% }); %>
+
+		</tbody>
+	</table>
+	<section>
+		<div class="row" style="position: relative;">
+			<div class="col-md-12">
+				<div id="chart" style="position: relative; height: 40vh; width: 100%;">
+					<canvas id="mychart" height="50" width="100" ></canvas>
+				</div>
+			</div>
+		</div>
+	</section>
+	</div>
+	
+	</div>
+	</div>
+	</div>
+	</div>
+	<%- include ('partials/footer') %>
+</body>
+
+<script>
+
+	var tf = new TableFilter(document.querySelector('.main-table'), {
+		filters_row_index: 1,
+		enable_checklist_reset_filter: false,
+		state: {
+			types: ['hash'],
+			filters: true
+		},
+		col_0: 'select',
+		col_2: 'select',
+		col_7: 'select'
+	});
+	tf.init();
+</script>
+
+</html>

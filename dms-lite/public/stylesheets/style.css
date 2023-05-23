@@ -24,20 +24,135 @@ body {
 /*  DATA PAGE */
 
 #data {
-    padding: 4em 0;
+    padding: 110px 75px 100px 75px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: auto;
 }
-
-
-
 #data #main-text {
-    border-bottom: 5px solid #05172d;
+    border-bottom: 4px solid #153A1E;
     width: 13em;
     font-weight: 600;
+    font-size: 36px;
+}
+.data_searchbar {
+    display: flex;
+    width: 100%;
+    height: auto;
+    padding: 1rem 0 1rem 0;
+    align-items: center;
+    gap: 2rem;
+}
+.data_subtext{
+    font-weight: 600;
+    cursor: default;
+}
+.data_button{
+    background-color: #F6E533;
+    color: #AA1111;
+    font-size: 20px;
+    padding: 16px 40px 16px 40px;
+    font-weight: 600;
+    border-radius: 12px;
+}
+.data_button:hover{
+    background-color:#f1df0f;
+}
+.table_container {
+    display: flex;
+    align-items: flex-start;
+    flex: 1;
+    width: 100%;
+    overflow: scroll;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: white;
 }
 
+th,
+td {
+    border: 1px solid #ffffff;
+    text-align: left;
+    padding: 8px;
+    cursor: pointer;
+}
+th {
+    background-color: #153A1E;
+    font-size: 26px;
+    line-height: 36px;
+    color: white;
+    cursor: default;
+}
+
+td {
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.footer_container {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.pagination_buttons_div{
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-start;
+    width: auto;
+    height: auto;
+    gap: 4px;
+    list-style-type: none;
+}
+
+.footer_text {
+    font-style: normal;
+    font-weight: 300;
+}
+
+.pagination_buttons {
+    color: black;
+    border-style: hidden;
+    text-decoration: none;
+    padding: 8px 15px;
+    background-color: white;
+    border: solid 1.13px #989898;
+    border-radius: 8px;
+}
+
+.pagination_buttons_active {
+    color: white;
+    background-color: #800000;
+    border-style: hidden;
+    text-decoration: none;
+    padding: 8px 15px;
+}
+
+.pagination_buttons:hover {
+    color: white;
+    background-color: #153A1E;
+    box-shadow: 10px 10px 7px -1px rgba(0, 0, 0, 0.1);
+    filter: saturate(150%);
+    transform: scale(1.05);
+    transition: ease 100ms;
+}
+tr:hover{
+    background-color: #FDFF78;
+}
 
 #data input {
-    width: 100%;
+    height: 64px;
+    width: 25%;
+    padding: 8px;
+    border: solid 1.5px #989898;
+    border-radius: 8px;
 }
 
 #data .gps-link {
@@ -48,65 +163,86 @@ body {
 /* DUCKS PAGE */
 
 #ducks {
-    padding: 4em 0;
+    padding: 110px 75px 0px 75px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: auto;
 }
 
 #ducks #main-text {
-    border-bottom: 5px solid #05172d;
+    border-bottom: 4px solid #153A1E;
     width: 13em;
     font-weight: 600;
+    font-size: 36px;
 }
 
 #ducks .ducks-list {
-    margin-left: -.75em;
-    margin-right: -.75em;
+    display: flex;
+    align-items: flex-start;
+    flex: 1;
+    width: 100%;
+    overflow: scroll;
 }
 
 #ducks .ducks-list .duck {
-    float: left;
-    display: block;
-    width: 33%;
-    padding: .75em;
+    display: flex;
+    width: 25%;
+    padding: 1rem;
+}
+.duck_status {
+    display: flex;
+    margin-bottom: 8px;
+    justify-content: space-between;
 }
 
 #ducks .ducks-list .duck .inner {
-    padding: 1em 0;
+    padding: 27px 32px;
     background: #fff;
-    border-radius: 4px;
+    border: solid 1px #989898;
     cursor: pointer;
+    width: 100%;
+    height: 310px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 5px 10px 8px #888888;
+    border-radius: 8px;
 }
 
 
 #ducks .ducks-list .duck .icon.offline {
     font-weight: 700;
-    line-height: 1.25em;
-    padding: .25em .35em .15em;
-    background: rgba(255, 87, 87, .26);
-    border: 1px solid #ff5757;
+    padding: 10px 7px;
+    color: white;
+    background: #DC3545;
     border-radius: 5px;
-    display: inline-block;
+    display: flex;
+    width: auto;
+    align-items: center;
 }
 
 #ducks .ducks-list .duck .icon.online {
     font-weight: 700;
     line-height: 1.25em;
     padding: .25em .35em .15em;
-    background: rgba(127, 255, 0, 0.5);
-    border: 1px solid chartreuse;
+    background: #28A745;
     border-radius: 5px;
     display: inline-block;
+    display: flex;
+    width: auto;
+    align-items: center;
 }
 
 #ducks .ducks-list .duck .icon img {
-    display: inline-block;
-    height: 1em;
-    margin: 0 .15em 0 0;
-    position: relative;
-    top: -.1em;
+    width: 22px;
+    margin: 0 12px 0 0;
 }
 
 #ducks .ducks-list .duck .status {
-    margin-bottom: .75em;
+    display: flex;
+    align-items: center;
 }
 
 #ducks .ducks-list .duck .status p {
@@ -117,7 +253,8 @@ body {
     margin: 0;
     text-transform: uppercase;
     color: red;
-    font-size: .6em;
+    font-size: 16px;
+    font-weight: 800;
     text-align: right;
     line-height: 2.5em;
     display: block;
@@ -127,7 +264,8 @@ body {
     margin: 0;
     text-transform: uppercase;
     color: chartreuse;
-    font-size: .6em;
+    font-size: 16px;
+    font-weight: 800;
     text-align: right;
     line-height: 2.5em;
     display: block;
@@ -135,22 +273,22 @@ body {
 
 
 #ducks .ducks-list .duck .mid {
-    font-size: .65em;
+    font-size: 8px;
     font-weight: 300;
     text-transform: uppercase;
     margin: 0;
 }
 
 #ducks .ducks-list .duck .payload {
-    font-size: .85em;
+    font-size: 16px;
     font-weight: 400;
     min-height: 3em;
     word-wrap: break-word
 }
 
 #ducks .ducks-list .duck .path {
-    font-size: .85em;
-    font-weight: 400;
+    font-size: 16px;
+    font-weight: 600;
     min-height: 2em;
 }
 
@@ -158,29 +296,42 @@ body {
     font-size: .5em;
     font-weight: 300;
     margin: 0;
+    position: absolute;
+    bottom: 16px;
 }
-
-
+.wifi_btn_div {
+    display: flex;
+    gap: 24px;
+}
+.wifi_btn{
+    font-size: 16px;
+    width: 92px;
+    height: 33px;
+    border: solid 1px black;
+    margin-top: 24px;
+}
 #ducks .ducks-list .duck:hover .inner {
-    background: #191e2d;
-    color: #fff;
+    background: #FDFF78;
 }
 
-#ducks .ducks-list .duck:hover .inner .icon img {
-    filter: invert(1);
-}
 
 
 /* SETTINGS PAGE */
 
 #settings {
-    padding: 4em 0;
+    padding: 110px 75px 100px 75px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: auto;
 }
 
 #settings #main-text {
-    border-bottom: 5px solid #05172d;
+    border-bottom: 4px solid #153A1E;
     width: 13em;
     font-weight: 600;
+    font-size: 36px;
 
 }
 

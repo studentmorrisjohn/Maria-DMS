@@ -9,7 +9,7 @@ const pool = mariadb.createPool({
 });
 
 // Test DB connection
-testDbConnection();
+ testDbConnection();
 
 // This will be updated
 // CREATE TABLE clusterData(timestamp datetime, duck_id TEXT, message_id TEXT, payload TEXT, path TEXT);
@@ -67,9 +67,41 @@ function getDuckPlusData() {
 }
 
 function postCommand(topic, payload) {
+	console.log(payload);
 	const sql = "INSERT INTO clusterCommands VALUES (?,?,?);";
 	pool.query(sql, [new Date().toISOString(),topic,payload]);
 	return true;
 }
 
-module.exports = { getAllData, getDataByDuckId, getUniqueDucks, getLastCount, getDuckPlusData, postCommand };
+// Functions for the map
+function getAllRescueesLocation() {
+	const sql = "SELECT * FROM clusterData WHERE SUBSTRING_INDEX(payload, '*', 1) IN (SELECT SUBSTRING_INDEX(payload, '*', 1) FROM clusterData WHERE topic='location' GROUP BY SUBSTRING_INDEX(payload, '*', 1) HAVING COUNT(*) = 1);";
+
+	return pool.query(sql).catch(error => console.log(error));
+}
+function getRescueeDetail() {}
+
+// Functions for adding mock data
+function insertToClusterData(duck_id, topic, message_id, payload, path, hops, duck_type) {	
+	
+	console.log("pumasok bai");
+	const sql = "INSERT INTO clusterData(timestamp, duck_Id, topic, message_id, payload, path, hops, duck_type) values (?, ?, ?, ?, ?, ?, ?, ?);";
+
+	pool.query("INSERT INTO clusterData (timestamp, duck_Id, topic, message_id, payload, path, hops, duck_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",  [new Date(), duck_id, topic, message_id, payload, path, hops, duck_type])
+		.then(result => {
+			console.log(`Rows inserted: ${result.affectedRows}`);
+			return `Rows inserted: ${result.affectedRows}`;
+		})
+		.catch(err => {
+			console.error(err);
+			return err;
+		});
+	
+
+}
+
+function socketTestDB() {
+
+}
+
+module.exports = { getAllData, getDataByDuckId, getUniqueDucks, getLastCount, getDuckPlusData, postCommand, insertToClusterData, getAllRescueesLocation, socketTestDB };

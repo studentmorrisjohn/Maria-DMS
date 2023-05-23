@@ -1,45 +1,121 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <%- include ('partials/head') %>
-    <%- include ('partials/nav') %>
-  </head>
-  <body>
-    <div class="row">
-      <div class="col-sm-4 main-box">
-        <div class="col-12 main-box-detail">
-        	<a href="/data">
-		    	<img src="/images/data.png" alt="data" class="icon-main">
-        		<h5>DATA</h5>
-        	</a>
-        </div>
-      </div>
-      <div class="col-sm-4 main-box">
-        <div class="col-12 main-box-detail">
-        	<a href="/ducks">
-		    	<img src="/images/duck.png" alt="data" class="icon-main">
-        		<h5>DUCKS</h5>
-        	</a>
-        </div>
-      </div>
-      <div class="col-sm-4 main-box">
-        <div class="col-12 main-box-detail">
-        	<a href="/map">
-		    	<img src="/images/duck.png" alt="data" class="icon-main">
-        		<h5>MAP</h5>
-        	</a>
-        </div>
-      </div>
-      <div class="col-sm-4 main-box">
-        <div class="col-12 main-box-detail">
-        	<a href="/settings">
-		    	<img src="/images/settings.png" alt="data" class="icon-main">
-        		<h5>SETTINGS</h5>
-        	</a>
-        </div>
-      </div>
 
-    </div>
-    <%- include ('partials/footer') %>
-  </body>
+    <head>
+       
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Project Maria</title>
+        <%- include ('partials/head') %>
+
+        <!-- Leaflet CSS-->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+        crossorigin=""/>
+
+        <!--Leaflet JavaScript-->
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+        crossorigin=""></script>
+
+        <!-- SOCKET IO -->
+	    <script src="/socket.io/socket.io.js"></script>
+
+    </head>
+
+
+    <body>
+        <div class="bg-div">
+            <%- include ('partials/nav' , {page:"home"}) %>
+            <div id="map"></div>
+            <%- include ('partials/footer') %>
+        </div>
+	    
+        
+
+        
+        <script>
+
+            // SOCKET IO
+            const socket = io('http://localhost:5345')
+	        socket.on("connection");
+
+            socket.on("addData", function(data) {
+                const payload = data["payload"].split("*");
+
+                var marker = L.marker([payload[1], payload[2]]).addTo(map);
+                // marker.bindPopup(`DEVICE ID - ${payload[0]}`).openPopup();
+                marker.on('click', function() {
+                    alert('TANGINA MO LETSGOOO');
+                });
+            });
+            
+            // All OpenStreetMap Testing
+
+            //Map Variable
+            var map = L.map('map');
+            map.setView([14.140285, 121.212066], 15)
+
+            const clearMap = () => {
+                map.eachLayer(function (layer) {
+                    if (layer instanceof L.Marker) {
+                        map.removeLayer(layer);
+                    }
+                });
+
+                console.log("Gumana, pre!");
+            }
+
+            const getData = async () => {
+                fetch('/testdata/getCoordinates?cache-buster=' + Date.now())
+                    .then(response => response.json())
+                    .then(data => {
+                        clearMap();
+                        console.log(data);
+                        data.map((coor) => {
+                            const payload = coor.payload.split("*");
+
+                            var marker = L.marker([payload[1], payload[2]]).addTo(map);
+                            // marker.bindPopup(`DEVICE ID - ${payload[0]}`).openPopup();
+                            marker.on('click', function() {
+                                alert('TANGINA MO LETSGOOO');
+                            });
+                        })
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+
+            var coors = getData();
+            
+
+            //Tile Layer
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            //Map Attribution
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            //Popups 
+            
+            var popup = L.popup();
+
+
+            function onMapClick(e) {
+                popup
+                .setLatLng(e.latlng)
+                .setContent("The coordinates are as follow " + e.latlng.toString())
+                .openOn(map);
+            }
+            
+            map.on('click', onMapClick);
+
+
+        </script>
+
+    </body>
+
+
 </html>

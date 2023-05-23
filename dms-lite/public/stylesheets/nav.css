@@ -1,67 +1,138 @@
-.nav-main{
-    background-color: #05172d;
-}
-.nav-link{
-    color: white;
-    text-transform: uppercase;
-    font-weight: 500;
-}
-
-.logo-nav{
-    width: 8em;
-    margin-right: 1em;
-}
-
-.main-box{
-    padding: 2em;
-}
-
-.main-box-detail{
-    background-color: #05172d;
-    border-radius: 8px;
-    color: white;
-    text-align: center;
+/***************Code Ko To Tanginamo***************/
+* {
+    margin: 0;
     padding: 0;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+.bg-div {
+    display: flex;
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+}
+.nav-main{
+    background-color: #153A1E;
+    position: relative;
+    display: flex;
+    height: 100%;
+    padding: 32px 0px 32px 32px;
+    width: 115px;
+    overflow: hidden;
+    transition: width 0.2s linear;
+    box-shadow: 0 20px 35px rgba(0,0,0,0.1);
+}  
+
+.nav-main-expand {
+    width: 393px;
+    transition: all 0.5s ease;
+}
+.nav-main-expand .nav-a{
+    padding-left: 32px;
+    transition: all 0.5s ease;
+}
+.nav-main-expand .logout{
+    padding-left: 32px;
+    transition: all 0.5s ease;
+}
+.nav-main-expand hr {
+    visibility: visible;
+    transition: visibility 0.5s ease;
+}
+.nav-main-expand .logo .list {
+    display: none;
+    transition: display 0.5s ease;
+}
+.nav-main-expand .logo .x {
+    display: block;
+    transition: display 0.5s ease;
 }
 
-.main-box-detail:hover{
-    opacity: 0.8;
-    transition: 0.2s ease-in-out;
+.logo {
+    display: flex;
+    transition: all 0.5s ease;
+    align-items: center;
 }
-
-.main-box-detail h5{
-    font-weight: 700;
+.logo .list{
+    width: 50px;
+    height: 50px;
+    transition: display 0.5s ease;
+    cursor: pointer;
+}
+.logo .x{
+    width: 50px;
+    height: 50px;
+    margin-left: 24px;
+    display: none;
+    transition: display 0.5s ease;
+    cursor: pointer;
+}
+.logo .dmsmaria {
+    margin-left: 36px;
+}
+.nav-span{
+    font-weight: bold;
+    padding-left: 36px;
+    font-size: 18px;
     text-transform: uppercase;
 }
-
-.icon-main{
-    width: 4em;
-    padding-bottom: 1em;
+.yellow {
+    color: yellow;
 }
-
-#logo-dms-footer{
-    width: 8em;
+.nav-a {
+    position: relative;
+    color: white;
+    display: table;
+    width: 300px;
+    margin-bottom: 46px;
+    transition: padding 0.2s linear;
 }
-
-.topnav {
-    overflow: hidden;
-}
-
-/* Style the links inside the navigation bar */
-.topnav a {
-    float: left;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
+.nav-a:hover {
     text-decoration: none;
-    font-size: 17px;
+    color: #F6E533;
 }
 
-/* Change the color of links on hover */
-.topnav a:hover {
-    background-color: #ddd;
-    color: #05172d;
+.icon {
+    position: relative;
+    width: 50px;
 }
+
+.logout {
+    color: white;
+    display: table;
+    width: 300px;
+    transition: padding 0.2s linear;
+    margin-bottom: 46px;
+}
+.logout:hover {
+    text-decoration: none;
+    color: #F6E533;
+}
+hr {
+    background-color: white;
+    height: 2px;
+    margin: 10px 30px 90px 0;
+    visibility: hidden;
+    transition: visibility 0s ease;
+}
+#map {
+     height: 100vh;
+     flex: 1;
+}
+
+ul{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.hover-li:hover {
+    border-right: 10px solid #F6E533;
+}
+
+/*************** /Code Ko To Tanginamo ***************/
 
 /* Add a color to the active/current link */
 .topnav a.active {

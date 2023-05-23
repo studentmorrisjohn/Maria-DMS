@@ -1,11 +1,98 @@
-<nav class="navbar nav-main ">
-    <a class="navbar-brand" href="/"><img src="/images/DMS-LOGO.png" alt="logo" class="logo-nav"></a>
-    <div class="topnav">
-        <a  href="/">Home</a>
-        <a href="/data">Data</a>
-        <a href="/map">Map</a>
-        <a href="/ducks">Ducks</a>
-        <a href="/settings">Settings</a>
-
-    </div>
+<nav id="nav-bar" class="nav-main">
+    <ul>
+        <div class="nav-div1">
+            <li>
+                <span href="" class="logo">
+                    <img id="hamburger-button" class="list" src="/images/List.png" alt="" />
+                    <img class="dmsmaria" src="/images/MARIA DMS.png" alt="" />
+                    <img id="exit-button" class="x" src="/images/X.png" alt="" />
+                </span>
+            </li>
+            <hr>
+            <li class="hover-li">
+                <a class="nav-a" href="/">
+                    <% if (page=="home" ) { %>
+                        <!-- code to execute if condition is true -->
+                        <img class="icon" src="/images/House_yellow.png" alt="" />
+                        <span class="nav-span yellow">Home</span>
+                        <% } else { %>
+                            <!-- code to execute if condition is false -->
+                            <img class="icon" src="/images/House.png" alt="" />
+                            <span class="nav-span">Home</span>
+                            <% } %>
+                </a>
+            </li>
+            <li class="hover-li">
+                <a class="nav-a" href="/data">
+                    <% if (page=="data" ) { %>
+                        <!-- code to execute if condition is true -->
+                        <img class="icon" src="/images/Database_yellow.png" alt="" />
+                        <span class="nav-span yellow">Data</span>
+                        <% } else { %>
+                            <!-- code to execute if condition is false -->
+                            <img class="icon" src="/images/Database.png" alt="" />
+                            <span class="nav-span">Data</span>
+                            <% } %>
+                </a>
+            </li>
+            <li class="hover-li">
+                <a class="nav-a" href="/ducks">
+                    <% if (page=="ducks" ) { %>
+                        <!-- code to execute if condition is true -->
+                        <img class="icon" src="/images/Bird_yellow.png" alt="" />
+                        <span class="nav-span yellow">Ducks</span>
+                        <% } else { %>
+                            <!-- code to execute if condition is false -->
+                            <img class="icon" src="/images/Bird.png" alt="" />
+                            <span class="nav-span">Ducks</span>
+                            <% } %>
+                </a>
+            </li>
+            <li class="hover-li">
+                <a class="nav-a" href="/settings">
+                    <% if (page=="settings" ) { %>
+                        <!-- code to execute if condition is true -->
+                        <img class="icon" src="/images/Gear_yellow.png" alt="" />
+                        <span class="nav-span yellow">Settings</span>
+                        <% } else { %>
+                            <!-- code to execute if condition is false -->
+                            <img class="icon" src="/images/Gear.png" alt="" />
+                            <span class="nav-span">Settings</span>
+                            <% } %>
+                </a>
+            </li>
+        </div>
+        <div class="nav-div2">
+            <li class="hover-li">
+                <a href="" class="logout">
+                    <% if (page=="logout" ) { %>
+                        <!-- code to execute if condition is true -->
+                        <img class="icon" src="/images/SignOut.png" alt="" />
+                        <span class="nav-span">Logout</span>
+                        <% } else { %>
+                            <!-- code to execute if condition is false -->
+                            <img class="icon" src="/images/SignOut.png" alt="" />
+                            <span class="nav-span">Logout</span>
+                            <% } %>
+                </a>
+            </li>
+        </div>
+        
+        
+    </ul>
 </nav>
+
+<script>
+    const navBar = document.getElementById("nav-bar");
+    const navOpener = document.getElementById("hamburger-button");
+
+    const toggleNavBar = () => {
+        navBar.classList.toggle("nav-main-expand");
+    };
+
+    navOpener.addEventListener("click", toggleNavBar);
+
+    const navCloser = document.getElementById("exit-button");
+
+    navCloser.addEventListener("click", toggleNavBar);
+</script>

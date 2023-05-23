@@ -2,14 +2,14 @@
 <html>
 <head>
     <%- include ('partials/head') %>
-    <%- include ('partials/nav') %>
+    
 </head>
 
 <body>
+    <div class="bg-div">
+        <%- include ('partials/nav', {page:"ducks"}) %>
+    
 <div id="ducks">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
                 <h4 id="main-text">Ducks in your network</h4>
 
                 <div class="ducks-list">
@@ -17,35 +17,36 @@
                     <% something.forEach(function(duck) { %>
                         <div class="duck">
                             <div class="inner">
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-sm-7 identity">
-                                            <div class="icon offline"><img src="/images/duck_dark.png"
+                                
+                                    <div class="duck_status">
+                                        <div class="identity">
+                                            <div class="icon offline"><img src="/images/Bird.png"
                                                                            alt="data"><%= duck.duck_id %></div>
                                         </div>
-                                        <div class="col-sm-5 status offline">
+                                        <div class="status offline">
                                             <p>offline</p>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
+                                    
                                             <p class="mid"><%= duck.message_id %></p>
                                             <p class="payload">    <%= duck.payload %></p>
                                             <p class="path">    <%= duck.path %></p>
-                                            <p class="payload">
-                                            <form action="/ducks/postEnableWiFi" method="post">
-                                            <input type="hidden" id="duck_id" name="duck_id" value="<%= duck.duck_id %>">
-                                            <input type="submit" class="button"value="WiFi ON"/>
-                                            </form>
-                                            <form action="/ducks/postDisableWiFi" method="post">
-                                            <input type="hidden" id="duck_id" name="duck_id" value="<%= duck.duck_id %>">
-                                            <input type="submit" class="button"value="WiFi OFF"/>
-                                            </form>
-                                            </p>
-                                        </div>
-                                    </div>
+
+                                            <div class="wifi_btn_div">
+                                                <form action="/ducks/postEnableWiFi" method="post">
+                                                    <input type="hidden" id="duck_id" name="duck_id" value="<%= duck.duck_id %>">
+                                                    <input type="submit" class="wifi_btn"value="WiFi ON"/>
+                                                </form>
+                                                <form action="/ducks/postDisableWiFi" method="post">
+                                                    <input type="hidden" id="duck_id" name="duck_id" value="<%= duck.duck_id %>">
+                                                    <input type="submit" class="wifi_btn"value="WiFi OFF"/>
+                                                </form>
+                                            </div>
+                                            
+                                           
+
                                     <p class="updated"><%= duck.timestamp %></p>
-                                </div>
+                                
                             </div>
                         </div>
 
@@ -70,10 +71,9 @@
                     <% }); %>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        
 <%- include ('partials/footer') %>
+</div>
 </body>
 <script>
 

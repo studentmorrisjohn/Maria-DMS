@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+       
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Project Maria</title>
+        <%- include ('partials/head') %>
+
+        <!-- Leaflet CSS-->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+        crossorigin=""/>
+
+        <!--Leaflet JavaScript-->
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+        crossorigin=""></script>
+
+        <!-- CSS -->
+        <style>
+            #map { height: 100vh; width: 100%; z-index: 1; }
+        </style>
+
+        <!-- SOCKET IO -->
+	    <script src="/socket.io/socket.io.js"></script>
+
+    </head>
+
+
+    <body>
+        <h4 id="main-text">Page to add mock data</h4>
+
+
+        <form id="payloadForm">
+            <label for="payload">Payload:</label>
+            <input type="text" id="payload" name="payloadInput">
+
+            <br />
+
+            <label for="topicDropdown">Select a topic:</label>
+            <select id="topicDropdown" name="topic">
+                <option value="location">Location</option>
+                <option value="message">Message</option>
+            </select>
+
+            <br />
+
+            <button type="submit" name="submitButton">Click me to add data!</button>
+        </form>
+
+        <script>
+            // SOCKET IO
+            const socket = io('http://localhost:5345')
+            socket.on("connection")
+
+            const form = document.getElementById('payloadForm');
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const payload = document.getElementById('payload').value;
+                const topic = document.getElementById('topicDropdown').value;
+
+                const options = {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ payload, topic })
+                };
+
+
+                // const response = await fetch('/testData/addData', options );
+                // const result = await response.json();
+                // console.log(result);
+
+                // SOCKET IO
+                fetch('/testData/addData', options ).then().finally( ()=> {
+                    socket.emit("addData", {"payload":payload});
+                })
+                
+            });
+
+
+        </script>
+
+    </body>
+
+
+</html>
