@@ -37,7 +37,8 @@
         
         <script>
 
-            const initialPosition = [14.734565, 120.98652]
+            const initialPosition = [14.734902, 120.987555]
+            const zoom = 18
 
             // SOCKET IO
             const socket = io('http://localhost:5345')
@@ -57,7 +58,7 @@
 
             //Map Variable
             var map = L.map('map');
-            map.setView(initialPosition, 15)
+            map.setView(initialPosition, zoom)
 
             const clearMap = () => {
                 map.eachLayer(function (layer) {
