@@ -35,6 +35,11 @@ io.on('connection', function(socket) {
     console.log('received data:', data);
   });
 
+  socket.on('new_location', function(data) {
+    socket.broadcast.emit("new_location", data);
+    console.log('received data:', data);
+  });
+
   socket.on('disconnect', function() {
     console.log("User disconnected: " + socket.id);
   });

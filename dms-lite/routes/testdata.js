@@ -66,6 +66,23 @@ router.get('/getCoordinates', noCache, function (req, res, next) {
   });
 });
 
+router.get('/getDetails', noCache, function (req, res, next) {
+  const clientId = req.query.clientId;
+
+  try {
+    db.getRescueeDetail(clientId).then((response) => {
+      //console.log(response["payload"]);
+      
+      res.json(response);
+  
+    });
+  }
+  catch (error) {
+    res.json({"error":error});
+  }
+  
+});
+
 
 
 module.exports = router;

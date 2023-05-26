@@ -1,10 +1,10 @@
 const mariadb = require('mariadb');
 
 const pool = mariadb.createPool({
-	host: process.env.MYSQL_HOST,
-	user: process.env.MYSQL_USER,
-	password: process.env.MYSQL_PASSWORD,
-	database: process.env.MYSQL_DATABASE,
+	host: 'localhost',
+	user: 'notmorrisjohn',
+	password: 'admin1234',
+	database: 'dms-lite',
 	connectionLimit: 5
 });
 
@@ -75,11 +75,30 @@ function postCommand(topic, payload) {
 
 // Functions for the map
 function getAllRescueesLocation() {
-	const sql = "SELECT * FROM clusterData WHERE SUBSTRING_INDEX(payload, '*', 1) IN (SELECT SUBSTRING_INDEX(payload, '*', 1) FROM clusterData WHERE topic='location' GROUP BY SUBSTRING_INDEX(payload, '*', 1) HAVING COUNT(*) = 1);";
+	const sql = "SELECT t1.*\
+	FROM clusterData t1\
+	JOIN (\
+		SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(payload, '*', 1), '*', -1) AS id, MAX(timestamp) AS max_timestamp\
+		FROM clusterData\
+		WHERE topic = 'gps'\
+		GROUP BY id\
+	) t2 ON t1.timestamp = t2.max_timestamp AND SUBSTRING_INDEX(SUBSTRING_INDEX(t1.payload, '*', 1), '*', -1) = t2.id AND t1.topic = 'gps'\
+	WHERE t1.topic = 'gps';"
 
 	return pool.query(sql).catch(error => console.log(error));
 }
-function getRescueeDetail() {}
+
+
+
+function getRescueeDetail(clientId) {
+	const sql = `SELECT *\
+	FROM clusterData\
+	WHERE topic = 'portal' AND SUBSTRING_INDEX(SUBSTRING_INDEX(payload, '*', 1), '*', -1) = '${clientId}'\
+	ORDER BY timestamp DESC\
+	LIMIT 1;`
+
+	return pool.query(sql).catch(error => console.log(error));
+}
 
 // Functions for adding mock data
 function insertToClusterData(duck_id, topic, message_id, payload, path, hops, duck_type) {	
@@ -104,4 +123,4 @@ function socketTestDB() {
 
 }
 
-module.exports = { getAllData, getDataByDuckId, getUniqueDucks, getLastCount, getDuckPlusData, postCommand, insertToClusterData, getAllRescueesLocation, socketTestDB };
+module.exports = { getAllData, getDataByDuckId, getUniqueDucks, getLastCount, getDuckPlusData, postCommand, insertToClusterData, getAllRescueesLocation, socketTestDB, getRescueeDetail };

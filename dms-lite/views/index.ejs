@@ -49,9 +49,17 @@
 
                 var marker = L.marker([payload[1], payload[2]]).addTo(map);
                 // marker.bindPopup(`DEVICE ID - ${payload[0]}`).openPopup();
+
                 marker.on('click', function() {
                     alert('TANGINA MO LETSGOOO');
                 });
+
+                
+            });
+
+
+            socket.on("new_location", function(data) {
+                getData();
             });
             
             // All OpenStreetMap Testing
