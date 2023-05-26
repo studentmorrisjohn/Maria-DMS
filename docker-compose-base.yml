@@ -20,6 +20,9 @@ services:
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_HOST: "${MYSQL_HOST}"
+
+    networks:
+      - my_network
   mariadb:
     image: lscr.io/linuxserver/mariadb:10.5.13-r0-ls43
     hostname: mariadb
@@ -36,6 +39,10 @@ services:
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_HOST: "${MYSQL_HOST}"
+    networks:
+      - my_network
 
 
-
+networks:
+  my_network:
+    driver: bridge

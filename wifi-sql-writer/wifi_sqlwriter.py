@@ -7,6 +7,21 @@ import logging
 import os
 import time
 
+import socketio
+
+# Socket.IO configuration
+socketio_server = "web"
+socketio_port = 5345  # Replace with the appropriate port number
+
+socketio_client = socketio.Client()
+
+# Socket.IO event handlers
+@socketio_client.on("connect")
+def on_socketio_connect():
+    print("Connected to Socket.IO server")
+
+socketio_client.connect(f"http://{socketio_server}:{socketio_port}")
+
 # Put in to hopefully wait long enough for MariaDB to come up
 status_topic = "#"
 logging.warning("Write to DB is Running")
@@ -31,8 +46,10 @@ def on_message(client, userdata, msg):
     print (json.dumps(p))
     print("New message received")
     logging.warning("New message received")
-    print(["topic"])
+    print(p["topic"])        
     writeToDb(theTime, p["DeviceID"], p["topic"], p["MessageID"], p["Payload"], p["path"], p["hops"], p["duckType"])
+    socketio_client.emit("new_location", p["Payload"])
+    
     return
 
 def writeToDb(theTime, duckId, topic, messageId, payload, path, hops, duckType):
@@ -49,6 +66,10 @@ def writeToDb(theTime, duckId, topic, messageId, payload, path, hops, duckType):
         c.execute("INSERT INTO clusterData VALUES (?,?,?,?,?,?,?,?)", (theTime, duckId, topic, messageId, payload, path, hops, duckType))
         conn.commit()
         conn.close()
+
+        
+
+
     except mariadb.Error as e:
         print("Not Correct Packet")
         print(e)
