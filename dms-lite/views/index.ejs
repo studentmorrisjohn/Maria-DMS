@@ -28,6 +28,18 @@
     <body>
         <div class="bg-div">
             <%- include ('partials/nav' , {page:"home"}) %>
+            <div id ="info-modal">
+                <span>Client ID: </span><span id="modal_clientId"> Loading Data </span> <br />
+                <span>Location: </span><span id="modal_location"> Loading Data </span> <br />
+                <span>Type: </span><span id="modal_emergency"> Loading Data </span> <br />
+                <span>Name: </span><span id="modal_rescuee_name"> Loading Data </span> <br />
+                <span>Phone Number: </span><span id="modal_phone"> Loading Data </span> <br />
+                <span>Needs: </span><span id="modal_needs"> Loading Data </span> <br />
+                <span>Dangers: </span><span id="modal_dangers"> Loading Data </span> <br />
+                <span>#of People: </span><span id="modal_noOfPeople"> Loading Data</span> <br />
+                <span>Immobile: </span><span id="modal_immobile"> Loading Data</span> <br />
+                <span>Message: </span><span id="modal_message"> Loading Data</span> <br />
+            </div>
             <div id="map"></div>
             <%- include ('partials/footer') %>
         </div>
@@ -58,7 +70,7 @@
             });
 
 
-            socket.on("new_location", function(data) {
+            socket.on("new_location", function(data) {                              
                 getData();
             });
             
@@ -90,9 +102,21 @@
                             var marker = L.marker([payload[1], payload[2]]).addTo(map);
                             // marker.bindPopup(`DEVICE ID - ${payload[0]}`).openPopup();
                             marker.on('click', function() {
-                                alert('TANGINA MO LETSGOOO');
+                                showModal(payload);
                             });
                         })
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+
+            const getDetails = async (clientId) => {
+                fetch('/testData/getDetails?clientId=' + clientId)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        updateModalInfo(data);
                     })
                     .catch(error => {
                         console.error(error);
@@ -123,6 +147,38 @@
             
             map.on('click', onMapClick);
 
+            function showModal(payload) {
+                var div = document.getElementById("info-modal");
+                var location_element = document.getElementById("modal_location");
+                var client_id_element = document.getElementById("modal_clientId");
+
+                var clientId = payload[0];
+                var location = `${payload[1]}, ${payload[2]}`
+
+                getDetails(clientId);
+
+                div.style.display = "block";
+                location_element.textContent = location; 
+                client_id_element.textContent = clientId; 
+
+
+            }
+
+            function updateModalInfo(data) {
+                if (!data) {
+                    return;
+                }
+                const payload = data["payload"].split("*");
+                var name = payload[1];
+                var number = payload[2];
+                var emergency = payload[3];
+                var needs = payload[3];
+                var dangers = payload[3];
+                var num_people = payload[3];
+                var immobile = payload[3];
+                var message = payload[3];
+                
+            }
 
         </script>
 

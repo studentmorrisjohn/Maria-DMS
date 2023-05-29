@@ -419,6 +419,16 @@ table tr:last-child td:last-child {
 }
 
 
-
+#info-modal{
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 32rem;
+    height: 32rem;
+    margin: 2rem;
+    z-index: 2;
+    background-color: #d4d4d4;
+    display: none;
+}
 
 
