@@ -110,7 +110,7 @@
     text-decoration: none;
     color: #F6E533;
 }
-hr {
+.nav_hr {
     background-color: white;
     height: 2px;
     margin: 10px 30px 90px 0;
@@ -120,6 +120,7 @@ hr {
 #map {
      height: 100vh;
      flex: 1;
+     z-index: 1;
 }
 
 ul{

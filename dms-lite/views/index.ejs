@@ -28,6 +28,43 @@
     <body>
         <div class="bg-div">
             <%- include ('partials/nav' , {page:"home"}) %>
+            <div id ="info-modal">
+                <div class="modal_row">
+                    <span class="modal_category">Client ID: </span><span class="modal_value" id="modal_clientId"> Loading Data </span> 
+                </div>
+                <div class="modal_row">
+                    <span class="modal_category">Location: </span><span class="modal_value" id="modal_location"> Loading Data </span> 
+                </div>
+                <div class="modal_row">
+                    <span class="modal_category">Name: </span><span class="modal_value" id="modal_rescuee_name"> Loading Data </span>
+                </div>
+                <div class="modal_row">
+                    <span class="modal_category">Phone Number: </span><span class="modal_value" id="modal_phone"> Loading Data </span> 
+                </div>
+                <hr>
+                <div class="modal_row">
+                    <span class="modal_category">Type: </span><span class="modal_value red" id="modal_emergency"> Loading Data </span> 
+                </div>
+                <div class="modal_row">
+                    <span class="modal_category">Needs: </span><span class="modal_value" id="modal_needs"> Loading Data </span>
+                </div>
+                <div class="modal_row">
+                    <span class="modal_category">Dangers: </span><span class="modal_value" id="modal_dangers"> Loading Data </span>
+                </div>
+                <hr >
+                <div class="modal_row">
+                    <span class="modal_category">#of People: </span><span class="modal_value" id="modal_noOfPeople"> Loading Data</span>
+                </div>
+                <div class="modal_row">
+                    <span class="modal_category">Immobile: </span><span class="modal_value" id="modal_immobile"> Loading Data</span>
+                </div>
+                <div class="modal_row">
+                    <span class="modal_category">Message: </span><span class="modal_value" id="modal_message"> Loading Data</span>
+                </div>
+                <div class="modal_status">
+                    <span class="modal_status_text"> RESCUERS SENT </span>
+                </div>
+            </div>
             <div id="map"></div>
             <%- include ('partials/footer') %>
         </div>
@@ -58,7 +95,7 @@
             });
 
 
-            socket.on("new_location", function(data) {
+            socket.on("new_location", function(data) {                              
                 getData();
             });
             
@@ -90,9 +127,21 @@
                             var marker = L.marker([payload[1], payload[2]]).addTo(map);
                             // marker.bindPopup(`DEVICE ID - ${payload[0]}`).openPopup();
                             marker.on('click', function() {
-                                alert('TANGINA MO LETSGOOO');
+                                showModal(payload);
                             });
                         })
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+
+            const getDetails = async (clientId) => {
+                fetch('/testData/getDetails?clientId=' + clientId)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        updateModalInfo(data);
                     })
                     .catch(error => {
                         console.error(error);
@@ -123,6 +172,38 @@
             
             map.on('click', onMapClick);
 
+            function showModal(payload) {
+                var div = document.getElementById("info-modal");
+                var location_element = document.getElementById("modal_location");
+                var client_id_element = document.getElementById("modal_clientId");
+
+                var clientId = payload[0];
+                var location = `${payload[1]}, ${payload[2]}`
+
+                getDetails(clientId);
+
+                div.style.display = "block";
+                location_element.textContent = location; 
+                client_id_element.textContent = clientId; 
+
+
+            }
+
+            function updateModalInfo(data) {
+                if (!data) {
+                    return;
+                }
+                const payload = data["payload"].split("*");
+                var name = payload[1];
+                var number = payload[2];
+                var emergency = payload[3];
+                var needs = payload[3];
+                var dangers = payload[3];
+                var num_people = payload[3];
+                var immobile = payload[3];
+                var message = payload[3];
+                
+            }
 
         </script>
 

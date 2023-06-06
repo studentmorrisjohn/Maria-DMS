@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'Inter';
+    src: url('path/to/inter.woff2') format('woff2'),
+         url('path/to/inter.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
 body {
     font-family: Roboto, sans-serif;
     background: #eee;
@@ -419,6 +427,59 @@ table tr:last-child td:last-child {
 }
 
 
+#info-modal{
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 22rem;
+    height: fit-content;
+    padding: 1.5rem;
+    margin: 2rem;
+    z-index: 2;
+    background-color: #ffffff;
+    display: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    background-color: rgba(255, 255, 255, 0.9);
+}
 
+#info-modal hr{
+    background-color: #989898;
+    margin: .5rem;
+}
 
+.modal_row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin:.2rem;
+  }
+.modal_category {
+    font-weight: bold;
+    flex: .5;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+}
+.modal_value {
+    flex: .5;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+}
+.red {
+    color: #E11C1C;
+    font-weight: bold;
+}
+.modal_status{
+    margin-top: 1rem;
+    background-color: yellow;
+    padding: 0.5rem 0;
+    border-radius: 0.5rem;
+    justify-content: center;
+    display: flex;
+}
+.modal_status_text {
+    font-weight: bold;
+    font-size: 18px;
+    font-family: 'Inter', sans-serif;
+    color: #AA1111;
+}
 
