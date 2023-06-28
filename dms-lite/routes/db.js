@@ -119,8 +119,10 @@ function insertToClusterData(duck_id, topic, message_id, payload, path, hops, du
 
 }
 
-function socketTestDB() {
+function deleteAllData() {
+	const sql = `TRUNCATE TABLE clusterData;`
 
+	return pool.query(sql).catch(error => console.log(error));
 }
 
-module.exports = { getAllData, getDataByDuckId, getUniqueDucks, getLastCount, getDuckPlusData, postCommand, insertToClusterData, getAllRescueesLocation, socketTestDB, getRescueeDetail };
+module.exports = { getAllData, getDataByDuckId, getUniqueDucks, getLastCount, getDuckPlusData, postCommand, insertToClusterData, getAllRescueesLocation, deleteAllData, getRescueeDetail };

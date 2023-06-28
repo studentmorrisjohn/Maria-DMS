@@ -83,6 +83,13 @@ router.get('/getDetails', noCache, function (req, res, next) {
   
 });
 
+router.get('/deleteAll', noCache, function (req, res, next) {
+  db.deleteAllData().then((response) => {
 
+    
+    res.json({"boss":"nadelete na lahat yare ka"});
+
+  });
+});
 
 module.exports = router;

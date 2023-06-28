@@ -30,40 +30,40 @@
             <%- include ('partials/nav' , {page:"home"}) %>
             <div id ="info-modal">
                 <div class="modal_row">
-                    <span class="modal_category">Client ID: </span><span class="modal_value" id="modal_clientId"> Loading Data </span> 
+                    <span class="modal_category">Client ID: </span><span class="modal_value" id="modal_clientId">  </span> 
                 </div>
                 <div class="modal_row">
-                    <span class="modal_category">Location: </span><span class="modal_value" id="modal_location"> Loading Data </span> 
+                    <span class="modal_category">Location: </span><span class="modal_value" id="modal_location">  </span> 
                 </div>
                 <div class="modal_row">
-                    <span class="modal_category">Name: </span><span class="modal_value" id="modal_rescuee_name"> Loading Data </span>
+                    <span class="modal_category">Name: </span><span class="modal_value" id="modal_rescuee_name"> </span>
                 </div>
                 <div class="modal_row">
-                    <span class="modal_category">Phone Number: </span><span class="modal_value" id="modal_phone"> Loading Data </span> 
+                    <span class="modal_category">Phone Number: </span><span class="modal_value" id="modal_phone">  </span> 
                 </div>
                 <hr>
                 <div class="modal_row">
-                    <span class="modal_category">Type: </span><span class="modal_value red" id="modal_emergency"> Loading Data </span> 
+                    <span class="modal_category">Type: </span><span class="modal_value red" id="modal_emergency">  </span> 
                 </div>
                 <div class="modal_row">
-                    <span class="modal_category">Needs: </span><span class="modal_value" id="modal_needs"> Loading Data </span>
+                    <span class="modal_category">Needs: </span><span class="modal_value" id="modal_needs">  </span>
                 </div>
                 <div class="modal_row">
-                    <span class="modal_category">Dangers: </span><span class="modal_value" id="modal_dangers"> Loading Data </span>
+                    <span class="modal_category">Dangers: </span><span class="modal_value" id="modal_dangers">  </span>
                 </div>
                 <hr >
                 <div class="modal_row">
-                    <span class="modal_category">#of People: </span><span class="modal_value" id="modal_noOfPeople"> Loading Data</span>
+                    <span class="modal_category">#of People: </span><span class="modal_value" id="modal_noOfPeople"> </span>
                 </div>
                 <div class="modal_row">
-                    <span class="modal_category">Immobile: </span><span class="modal_value" id="modal_immobile"> Loading Data</span>
+                    <span class="modal_category">Immobile: </span><span class="modal_value" id="modal_immobile"> </span>
                 </div>
                 <div class="modal_row">
-                    <span class="modal_category">Message: </span><span class="modal_value" id="modal_message"> Loading Data</span>
+                    <span class="modal_category">Message: </span><span class="modal_value" id="modal_message"> </span>
                 </div>
-                <div class="modal_status">
+                <!-- <div class="modal_status">
                     <span class="modal_status_text"> RESCUERS SENT </span>
-                </div>
+                </div> -->
             </div>
             <div id="map"></div>
             <%- include ('partials/footer') %>
@@ -76,27 +76,21 @@
 
             const initialPosition = [14.734902, 120.987555]
             const zoom = 18
+            var modalClientId = "SSSS"
 
             // SOCKET IO
             const socket = io('http://localhost:5345')
 	        socket.on("connection");
 
             socket.on("addData", function(data) {
-                const payload = data["payload"].split("*");
-
-                var marker = L.marker([payload[1], payload[2]]).addTo(map);
-                // marker.bindPopup(`DEVICE ID - ${payload[0]}`).openPopup();
-
-                marker.on('click', function() {
-                    showModal(payload);
-                });
-
-                
+                getData();
+                getDetails();
             });
 
 
             socket.on("new_location", function(data) {                              
                 getData();
+                getDetails();
             });
             
             // All OpenStreetMap Testing
@@ -122,13 +116,23 @@
                         clearMap();
                         console.log(data);
                         data.map((coor) => {
+                            
                             const payload = coor.payload.split("*");
 
-                            var marker = L.marker([payload[1], payload[2]]).addTo(map);
-                            // marker.bindPopup(`DEVICE ID - ${payload[0]}`).openPopup();
-                            marker.on('click', function() {
-                                showModal(payload);
-                            });
+                            try {
+                                if (payload[3] == "0") {
+                                    var marker = L.marker([payload[1], payload[2]]).addTo(map);
+                                    // marker.bindPopup(`DEVICE ID - ${payload[0]}`).openPopup();
+                                    marker.on('click', function() {
+                                        showModal(payload);
+                                    });
+                                } else {
+                                    console.log("ligtas na siya hehe");
+                                }
+                            } catch {
+                                console.log("something went wrong");
+                            }
+
                         })
                     })
                     .catch(error => {
@@ -136,11 +140,11 @@
                     });
             }
 
-            const getDetails = async (clientId) => {
-                fetch('/testData/getDetails?clientId=' + clientId)
+            const getDetails = async () => {
+                fetch('/testData/getDetails?clientId=' + modalClientId)
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
+                        //console.log(data);
                         updateModalInfo(data);
                     })
                     .catch(error => {
@@ -180,7 +184,9 @@
                 var clientId = payload[0];
                 var location = `${payload[1]}, ${payload[2]}`
 
-                getDetails(clientId);
+                modalClientId = clientId
+
+                getDetails();
 
                 div.style.display = "block";
                 location_element.textContent = location; 
@@ -193,17 +199,109 @@
                 if (!data) {
                     return;
                 }
-                const payload = data["payload"].split("*");
+                console.log(data);
+
+                var name_element = document.getElementById("modal_rescuee_name");
+                var number_element = document.getElementById("modal_phone");
+                var emergency_element = document.getElementById("modal_emergency");
+                var needs_element = document.getElementById("modal_needs");
+                var danger_element = document.getElementById("modal_dangers");
+                var num_people_element = document.getElementById("modal_noOfPeople");
+                var immobile_element = document.getElementById("modal_immobile");
+                var message_element = document.getElementById("modal_message");
+
+                const payload = data[0]["payload"].split("*");
+                console.log(payload);
                 var name = payload[1];
                 var number = payload[2];
                 var emergency = payload[3];
-                var needs = payload[3];
-                var dangers = payload[3];
-                var num_people = payload[3];
-                var immobile = payload[3];
-                var message = payload[3];
+                var needs = payload[4];
+                var dangers = payload[5];
+                var num_people = payload[6];
+                var immobile = payload[7];
+                var message = payload[8];
+
+                if (!num_people) {
+                    num_people = 1;
+                }
+
+                if (immobile == "0") {
+                    immobile = "No";
+                } else {
+                    immobile = "Yes";
+                }
+
+
+                name_element.textContent = name;
+                number_element.textContent = number;
+                emergency_element.textContent = parseEmergency(emergency);
+                needs_element.textContent = parseNeeds(needs);
+                danger_element.textContent = parseDangers(dangers);
+                num_people_element.textContent = num_people;
+                immobile_element.textContent = immobile;
+                message_element.textContent = message;
                 
             }
+
+            function parseEmergency(emergency) {
+                var emergencyString = emergency.split("+");
+                const emergencyList = ["Medical", "Fire", "LandSlide", "Trapped", "Lost"];
+                var emergencies = removeBracketsAndWhitespace(emergencyString[0]);
+
+                
+
+                return convertStringToList(emergencies, emergencyList) + emergencyString[1];
+            }
+
+            function parseNeeds(needs) {{
+                var needsString = needs.split("+");
+                const needsList = ["First Aid", "Shelter", "Food / Water", "Rescue"];
+                var _needs = removeBracketsAndWhitespace(needsString[0]);
+
+                return convertStringToList(_needs, needsList) + needsString[1];
+            }}
+
+            function parseDangers(dangers) {{
+                var dangersString = dangers.split("+");
+                const dangersList = ["Blocked Trail", "Explosives", "Fire / Smokes", "Wild Animals", "Fallen Trees", "Chemicals"];
+                var _dangers = removeBracketsAndWhitespace(dangersString[0]);
+
+                return convertStringToList(_dangers, dangersList) + dangersString[1];
+            }}
+
+            function removeBracketsAndWhitespace(str) {
+                // Use regular expression with the replace() method
+                return str.replace(/^\s*\[|\]\s*$/g, '');
+            }
+
+
+
+
+            function convertStringToList(str, the_list) {
+                // Split the string by asterisk to get individual values
+                var values = str.split(',');
+
+                // Create an empty array to store the selected values
+                var selectedValues = [];
+
+                try {
+                    // Iterate over each value and check if it's 1
+                    for (var i = 0; i < values.length; i++) {
+                        if (values[i] === '1' && the_list[i]) {
+                            selectedValues.push(the_list[i]);
+                        }
+                    }
+                }
+                catch (error) {
+                    var selectedValues = [];
+                }
+
+                
+
+                // Return the selected values as a comma-separated string
+                return selectedValues.join(", ");
+            }
+
 
         </script>
 
