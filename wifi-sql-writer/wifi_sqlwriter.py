@@ -1,5 +1,6 @@
 #This script takes the incoming messages and writes them to the DB  & MQTT
 from time import gmtime, strftime
+from datetime import datetime
 import paho.mqtt.client as mqtt
 import mariadb
 import json
@@ -35,9 +36,17 @@ def on_connect(client, userdata, flags, rc):
     # reconnect then subscriptions will be renewed.
     client.subscribe(status_topic)
 
+def get_current_datetime_with_milliseconds():
+    manila_datetime = datetime.now()
+
+    # Format the datetime with milliseconds
+    formatted_datetime = manila_datetime.strftime("%Y-%m-%d %H:%M:%S.%f")
+
+    return formatted_datetime
+
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-    theTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    theTime = get_current_datetime_with_milliseconds()
 
     result = (theTime + "\t" + str(msg.payload))
     print(msg.topic + ":\t" + result)
