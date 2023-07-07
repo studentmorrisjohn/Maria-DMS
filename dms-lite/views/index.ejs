@@ -78,6 +78,7 @@
             const zoom = 18
             var modalClientId = "SSSS"
 
+
             // SOCKET IO
             const socket = io('http://localhost:5345')
 	        socket.on("connection");
@@ -123,11 +124,16 @@
                                 if (payload[3] == "0") {
                                     var marker = L.marker([payload[1], payload[2]]).addTo(map);
                                     // marker.bindPopup(`DEVICE ID - ${payload[0]}`).openPopup();
+                                    
                                     marker.on('click', function() {
                                         showModal(payload);
                                     });
                                 } else {
                                     console.log("ligtas na siya hehe");
+                                    if (payload[0] == modalClientId) {
+                                        var div = document.getElementById("info-modal");
+                                        div.style.display = "none";
+                                    }
                                 }
                             } catch {
                                 console.log("something went wrong");
@@ -177,7 +183,9 @@
             map.on('click', onMapClick);
 
             function showModal(payload) {
+
                 var div = document.getElementById("info-modal");
+                
                 var location_element = document.getElementById("modal_location");
                 var client_id_element = document.getElementById("modal_clientId");
 
@@ -188,11 +196,11 @@
 
                 getDetails();
 
-                if (payload[3] == "0") {
-                    div.style.display = "block";
-                } else {
-                    div.style.display = "none";
-                }
+
+                div.style.display = "block";
+
+
+                
 
                 
                 location_element.textContent = location; 
@@ -209,6 +217,8 @@
                 }
                 console.log(data);
 
+                
+
                 var name_element = document.getElementById("modal_rescuee_name");
                 var number_element = document.getElementById("modal_phone");
                 var emergency_element = document.getElementById("modal_emergency");
@@ -218,36 +228,52 @@
                 var immobile_element = document.getElementById("modal_immobile");
                 var message_element = document.getElementById("modal_message");
 
-                const payload = data[0]["payload"].split("*");
-                console.log(payload);
-                var name = payload[1];
-                var number = payload[2];
-                var emergency = payload[3];
-                var needs = payload[4];
-                var dangers = payload[5];
-                var num_people = payload[6];
-                var immobile = payload[7];
-                var message = payload[8];
+                try {
+                    const payload = data[0]["payload"].split("*");
+                    console.log(payload);
+                    var name = payload[1];
+                    var number = payload[2];
+                    var emergency = payload[3];
+                    var needs = payload[4];
+                    var dangers = payload[5];
+                    var num_people = payload[6];
+                    var immobile = payload[7];
+                    var message = payload[8];
 
-                if (!num_people) {
-                    num_people = 1;
+                    if (!num_people) {
+                        num_people = 1;
+                    }
+
+                    if (immobile == "0") {
+                        immobile = "No";
+                    } else {
+                        immobile = "Yes";
+                    }
+
+
+                    console.log(payload[3]);
+
+
+                    name_element.textContent = name;
+                    number_element.textContent = number;
+                    emergency_element.textContent = parseEmergency(emergency);
+                    needs_element.textContent = parseNeeds(needs);
+                    danger_element.textContent = parseDangers(dangers);
+                    num_people_element.textContent = num_people;
+                    immobile_element.textContent = immobile;
+                    message_element.textContent = message;
+                } catch {
+                    name_element.textContent = "";
+                    number_element.textContent = "";
+                    emergency_element.textContent = "";
+                    needs_element.textContent = "";
+                    danger_element.textContent = "";
+                    num_people_element.textContent = "";
+                    immobile_element.textContent = "";
+                    message_element.textContent = "";
                 }
 
-                if (immobile == "0") {
-                    immobile = "No";
-                } else {
-                    immobile = "Yes";
-                }
-
-
-                name_element.textContent = name;
-                number_element.textContent = number;
-                emergency_element.textContent = parseEmergency(emergency);
-                needs_element.textContent = parseNeeds(needs);
-                danger_element.textContent = parseDangers(dangers);
-                num_people_element.textContent = num_people;
-                immobile_element.textContent = immobile;
-                message_element.textContent = message;
+                
                 
             }
 
