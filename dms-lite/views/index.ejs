@@ -188,12 +188,20 @@
 
                 getDetails();
 
-                div.style.display = "block";
+                if (payload[3] == "0") {
+                    div.style.display = "block";
+                } else {
+                    div.style.display = "none";
+                }
+
+                
                 location_element.textContent = location; 
                 client_id_element.textContent = clientId; 
 
 
             }
+
+            
 
             function updateModalInfo(data) {
                 if (!data) {
